@@ -466,6 +466,8 @@ instance Esqueleto SqlQuery SqlExpr SqlBackend where
   (|.)  = unsafeSqlBinOp " | "
   bitwiseNot = unsafeSqlUnOp "~ "
 
+  atTimeZone = unsafeSqlBinOp " AT TIME ZONE "
+
   random_  = unsafeSqlValue "RANDOM()"
   round_   = unsafeSqlFunction "ROUND"
   ceiling_ = unsafeSqlFunction "CEILING"

@@ -371,6 +371,10 @@ class (Functor query, Applicative query, Monad query) =>
   -- /Since: 2.4.2/
   bitwiseNot :: PersistField a => expr (Value a) -> expr (Value a)
 
+  -- At time zone
+  --
+  -- /Since: 2.4.2/
+  atTimeZone :: PersistField a => expr (Value a) -> expr (Value a) -> expr (Value a)
 
   random_  :: (PersistField a, Num a) => expr (Value a)
   round_   :: (PersistField a, Num a, PersistField b, Num b) => expr (Value a) -> expr (Value b)
