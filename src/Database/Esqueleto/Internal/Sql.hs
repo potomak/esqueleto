@@ -723,14 +723,15 @@ unsafeSqlFunctionParens name arg =
     in (name <> parens argsTLB, argsVals)
 
 -- | (Internal) An unsafe SQL function to cast an SQL value.
--- See 'unsafeSqlBinOp' for warnings.
-unsafeSqlCast :: UnsafeSqlFunctionArgument a =>
-                 TLB.Builder -> a -> SqlExpr (Value b)
-unsafeSqlCast targetType arg =
-  ERaw Never $ \info ->
-    let (argsTLB, argsVals) =
-          uncommas' $ map (\(ERaw _ f) -> f info) $ toArgList arg
-    in (parens (argsTLB <> "::" <> targetType), argsVals)
+--
+-- /Since: 2.4.2/
+unsafeSqlCast :: TLB.Builder -> SqlExpr (Value a) -> SqlExpr (Value b)
+unsafeSqlCast targetType (ERaw p f) = ERaw Never f'
+  where
+    f' info = let (b, vals) = f info
+              in (parensM p b <> "::" <> targetType, vals)
+unsafeSqlCast _ _ = unexpectedCompositeKeyError "unsafeSqlCast"
+{-# INLINE unsafeSqlCast #-}
 
 
 class UnsafeSqlFunctionArgument a where
